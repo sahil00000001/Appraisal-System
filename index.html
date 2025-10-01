@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Increment Process Automation - System Flowcharts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .control-panel label {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+
+        select {
+            padding: 10px 15px;
+            font-size: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            color: #333;
+            min-width: 280px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        select:hover {
+            border-color: #2a5298;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42,82,152,0.1);
+        }
+
+        .flowchart-area {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            min-height: 800px;
+            overflow-x: auto;
+        }
+
+        .flowchart {
+            display: none;
+        }
+
+        .flowchart.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Professional Box Styles */
+        .process-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .process-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .process-box {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            min-width: 200px;
+            max-width: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .process-box:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .box-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .box-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .box-list {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .box-list li {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* Box Type Styles - Professional Colors */
+        .box-start {
+            background: #f8f9fa;
+            border: 2px solid #2a5298;
+            border-left-width: 5px;
+        }
+
+        .box-start .box-header {
+            color: #2a5298;
+            border-bottom-color: #2a5298;
+        }
+
+        .box-form {
+            background: #f5f7fa;
+            border: 1px solid #8b9dc3;
+        }
+
+        .box-data-collection {
+            background: #fff8f0;
+            border: 1px solid #ff9800;
+        }
+
+        .box-review {
+            background: #f0f8ff;
+            border: 1px solid #4a90e2;
+        }
+
+        .box-meeting {
+            background: #f0fff4;
+            border: 1px solid #4caf50;
+        }
+
+        .box-decision {
+            background: #fff5f5;
+            border: 2px solid #e74c3c;
+            position: relative;
+        }
+
+        .box-approval {
+            background: #f8f0ff;
+            border: 1px solid #9c27b0;
+        }
+
+        .box-end {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-left-width: 5px;
+        }
+
+        /* Arrow Connectors */
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 30px;
+            background: #ddd;
+        }
+
+        .arrow-down::before {
+            content: '▼';
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Hierarchy Specific */
+        .hierarchy-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .hierarchy-level {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hierarchy-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px 35px;
+            min-width: 350px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .hierarchy-box h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .hierarchy-box .role {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .hierarchy-box .access-level {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+
+        .hierarchy-box .access-level strong {
+            color: #2a5298;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Hierarchy Color Coding */
+        .level-founder {
+            border-color: #e74c3c;
+            background: linear-gradient(to bottom, #fff, #fff5f5);
+        }
+
+        .level-founder h3 {
+            color: #e74c3c;
+        }
+
+        .level-l1 {
+            border-color: #3498db;
+            background: linear-gradient(to bottom, #fff, #f0f8ff);
+        }
+
+        .level-l1 h3 {
+            color: #3498db;
+        }
+
+        .level-l2 {
+            border-color: #9c27b0;
+            background: linear-gradient(to bottom, #fff, #f8f0ff);
+        }
+
+        .level-l2 h3 {
+            color: #9c27b0;
+        }
+
+        .level-l3 {
+            border-color: #ff9800;
+            background: linear-gradient(to bottom, #fff, #fff8f0);
+        }
+
+        .level-l3 h3 {
+            color: #ff9800;
+        }
+
+        .level-peer {
+            border-color: #4caf50;
+            background: linear-gradient(to bottom, #fff, #f0fff4);
+        }
+
+        .level-peer h3 {
+            color: #4caf50;
+        }
+
+        /* 360 Feedback Specific */
+        .feedback-container {
+            padding: 20px;
+        }
+
+        .feedback-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #2a5298;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feedback-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .weight-badge {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .rating-scale-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .rating-item {
+            flex: 1;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            border: 2px solid;
+            background: white;
+        }
+
+        .rating-5 { border-color: #4caf50; }
+        .rating-4 { border-color: #8bc34a; }
+        .rating-3 { border-color: #ffc107; }
+        .rating-2 { border-color: #ff9800; }
+        .rating-1 { border-color: #f44336; }
+
+        .rating-item .score {
+            font-size: 28px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .rating-5 .score { color: #4caf50; }
+        .rating-4 .score { color: #8bc34a; }
+        .rating-3 .score { color: #ffc107; }
+        .rating-2 .score { color: #ff9800; }
+        .rating-1 .score { color: #f44336; }
+
+        /* Privacy Zones */
+        .privacy-zone {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .zone-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .zone-restricted {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .zone-restricted .zone-label {
+            color: #f44336;
+            background: #ffebee;
+        }
+
+        .zone-limited {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .zone-limited .zone-label {
+            color: #ff9800;
+            background: #fff3e0;
+        }
+
+        .zone-full {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .zone-full .zone-label {
+            color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        /* Connector Lines */
+        .connector-vertical {
+            width: 2px;
+            height: 40px;
+            background: #ddd;
+            margin: 0 auto;
+        }
+
+        .connector-horizontal {
+            height: 2px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .process-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+
+            .flowchart-area {
+                padding: 20px;
+            }
+
+            .hierarchy-box {
+                min-width: 280px;
+            }
+
+            .rating-scale-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>Increment Process Automation System</h1>
+            <p>Enterprise Performance Review & Rating Management Platform</p>
+        </div>
+
+        <div class="control-panel">
+            <label for="flowchart-selector">Select Flowchart View:</label>
+            <select id="flowchart-selector" onchange="switchFlowchart(this.value)">
+                <option value="complete-flow">Complete Data Flow Process</option>
+                <option value="hierarchy">Hierarchy & Data Access Control</option>
+                <option value="feedback-rating">360° Feedback & Rating Calculation</option>
+                <option value="privacy-flow">Data Privacy & Information Flow</option>
+            </select>
+        </div>
+
+        <div class="flowchart-area">
+            <!-- Complete Data Flow -->
+            <div id="complete-flow" class="flowchart active">
+                <div class="process-container">
+                    <!-- Phase 1: Initialization -->
+                    <div class="process-box box-start arrow-down">
+                        <div class="box-header">Start Process</div>
+                        <div class="box-content">
+                            Annual Review Cycle Initiation
+                            <ul class="box-list">
+                                <li>System initialization</li>
+                                <li>Process kickoff</li>
+                                <li>Stakeholder notification</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-box box-review arrow-down">
+                        <div class="box-header">Define Timeline</div>
+                        <div class="box-content">
+                            Set Review Cycle Schedule
+                            <ul class="box-list">
+                                <li>Self-assessment deadline</li>
+                                <li>360 feedback window</li>
+                                <li>Manager review period</li>
+                                <li>Meeting schedules</li>
+                                <li>Final approval date</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-box box-review arrow-down">
+                        <div class="box-header">L2 Prepares Forms</div>
+                        <div class="box-content">
+                            Category-Specific Form Creation
+                            <ul class="box-list">
+                                <li>Customize by employee category</li>
+                                <li>Set evaluation criteria</li>
+                                <li>Define KRA parameters</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Form Categories -->
+                    <div class="process-row">
+                        <div class="process-box box-form">
+                            <div class="box-header">Software Dev Form</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Technical skills assessment</li>
+                                    <li>Code quality metrics</li>
+                                    <li>Project contributions</li>
+                                    <li>Bug resolution rate</li>
+                                    <li>Innovation initiatives</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-form">
+                            <div class="box-header">ML Engineer Form</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Model performance</li>
+                                    <li>Research contributions</li>
+                                    <li>Algorithm improvements</li>
+                                    <li>Data pipeline work</li>
+                                    <li>Production deployments</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-form">
+                            <div class="box-header">QA Engineer Form</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Test coverage metrics</li>
+                                    <li>Bug detection rate</li>
+                                    <li>Automation scripts</li>
+                                    <li>Test documentation</li>
+                                    <li>Process improvements</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-form">
+                            <div class="box-header">UI/UX Developer Form</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Design portfolio</li>
+                                    <li>User satisfaction scores</li>
+                                    <li>Accessibility improvements</li>
+                                    <li>Prototypes delivered</li>
+                                    <li>Design system contributions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <!-- Phase 2: Data Collection -->
+                    <div class="process-box box-data-collection arrow-down">
+                        <div class="box-header">L2 Sends Forms to Peers</div>
+                        <div class="box-content">
+                            Distribution to All Employees
+                            <ul class="box-list">
+                                <li>Email notifications sent</li>
+                                <li>Form access provided</li>
+                                <li>Submission deadline set</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-row">
+                        <div class="process-box box-data-collection">
+                            <div class="box-header">Employee Self Assessment</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Educational background</li>
+                                    <li>Past year achievements</li>
+                                    <li>Company contributions</li>
+                                    <li>Learning & growth</li>
+                                    <li>Current CTC</li>
+                                    <li>Expected CTC</li>
+                                    <li>KRA metrics</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-data-collection">
+                            <div class="box-header">Initiate 360° Feedback</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li>Select 4-5 colleagues</li>
+                                    <li>Send feedback requests</li>
+                                    <li>Anonymous collection</li>
+                                    <li>Performance review</li>
+                                    <li>Strengths assessment</li>
+                                    <li>Improvement areas</li>
+                                    <li>Team collaboration</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <!-- Phase 3: Manager Review -->
+                    <div class="process-box box-review arrow-down">
+                        <div class="box-header">L3 Manager Review</div>
+                        <div class="box-content">
+                            Initial Assessment & Comments
+                            <ul class="box-list">
+                                <li>Review self-assessment</li>
+                                <li>Analyze 360 feedback</li>
+                                <li>Add manager comments</li>
+                                <li>Performance validation</li>
+                                <li>Lock and forward to L2</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4: L2 Rating -->
+                    <div class="process-box box-review arrow-down">
+                        <div class="box-header">L2 Manager Comprehensive Review</div>
+                        <div class="box-content">
+                            Rating Generation & Analysis
+                            <ul class="box-list">
+                                <li>Review all collected data</li>
+                                <li>Analyze L3 comments</li>
+                                <li>Apply rating criteria</li>
+                                <li>Calculate weighted scores</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-box box-review arrow-down">
+                        <div class="box-header">Generate Initial Rating</div>
+                        <div class="box-content">
+                            Rating Calculation Formula:
+                            <ul class="box-list">
+                                <li>Self Rating (40% weight)</li>
+                                <li>Peer Feedback (30% weight)</li>
+                                <li>Manager Comments (20% weight)</li>
+                                <li>KRA Achievement (10% weight)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 5: One-to-One Meeting -->
+                    <div class="process-box box-meeting arrow-down">
+                        <div class="box-header">Schedule 1:1 Meeting</div>
+                        <div class="box-content">
+                            <ul class="box-list">
+                                <li>Send calendar invite</li>
+                                <li>Email notification with rating</li>
+                                <li>Meeting agenda preparation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-box box-meeting arrow-down">
+                        <div class="box-header">Conduct 1:1 Meeting</div>
+                        <div class="box-content">
+                            Discussion & Rating Review
+                            <ul class="box-list">
+                                <li>Present initial rating</li>
+                                <li>Discuss performance</li>
+                                <li>Feedback discussion</li>
+                                <li>Development planning</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="process-box box-decision arrow-down">
+                        <div class="box-header">L2 Decides: Modify Rating?</div>
+                        <div class="box-content">
+                            Based on discussion:
+                            <ul class="box-list">
+                                <li>Update rating if needed</li>
+                                <li>Keep original rating</li>
+                                <li>Document decision</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 6: Employee Satisfaction Check -->
+                    <div class="process-box box-decision">
+                        <div class="box-header">Employee Satisfied?</div>
+                        <div class="box-content">
+                            Employee reviews final rating
+                        </div>
+                    </div>
+
+                    <div class="process-row" style="margin-top: 40px;">
+                        <div class="process-box box-meeting">
+                            <div class="box-header">Appeal Process (If Not Satisfied)</div>
+                            <div class="box-content">
+                                One-Time Appeal Request
+                                <ul class="box-list">
+                                    <li>Submit appeal request</li>
+                                    <li>L2 reviews appeal</li>
+                                    <li>If accepted: 2nd meeting</li>
+                                    <li>Final rating after appeal</li>
+                                    <li>Rating locked permanently</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-approval">
+                            <div class="box-header">L1 Manager Review</div>
+                            <div class="box-content">
+                                Department Level Approval
+                                <ul class="box-list">
+                                    <li>Review L2 ratings</li>
+                                    <li>Validate consistency</li>
+                                    <li>Approve or request changes</li>
+                                    <li>Forward to Harry</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <!-- Phase 7: Final Approval -->
+                    <div class="process-box box-approval arrow-down">
+                        <div class="box-header">Harry - Final Approval</div>
+                        <div class="box-content">
+                            CEO Final Review
+                            <ul class="box-list">
+                                <li>Review all ratings</li>
+                                <li>Final approval/rejection</li>
+                                <li>Sign-off on increments</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Phase 8: Completion -->
+                    <div class="process-box box-end">
+                        <div class="box-header">Process Complete</div>
+                        <div class="box-content">
+                            <ul class="box-list">
+                                <li>Send congratulations email</li>
+                                <li>Update HR system</li>
+                                <li>Implement salary changes</li>
+                                <li>Archive review data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hierarchy & Data Access -->
+            <div id="hierarchy" class="flowchart">
+                <div class="hierarchy-container">
+                    <div class="hierarchy-level">
+                        <div class="hierarchy-box level-founder">
+                            <h3>Harry</h3>
+                            <div class="role">Company Founder / CEO</div>
+                            <div class="access-level">
+                                <strong>Full System Access</strong>
+                                • All employee data<br>
+                                • All ratings and feedback<br>
+                                • Financial information<br>
+                                • System configuration<br>
+                                • Final approval authority
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <div class="hierarchy-level">
+                        <div class="hierarchy-box level-l1">
+                            <h3>L1 Manager</h3>
+                            <div class="role">Senior Management Level</div>
+                            <div class="access-level">
+                                <strong>Department Level Access</strong>
+                                • All L2 manager data<br>
+                                • All L3 manager data<br>
+                                • All peer employee data<br>
+                                • Department ratings<br>
+                                ✗ Cannot access other L1 data
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <div class="hierarchy-level">
+                        <div class="hierarchy-box level-l2">
+                            <h3>L2 Manager</h3>
+                            <div class="role">Middle Management Level</div>
+                            <div class="access-level">
+                                <strong>Team Level Access</strong>
+                                • All L3 manager data<br>
+                                • All peer employee data<br>
+                                • Team ratings and feedback<br>
+                                • Rating generation authority<br>
+                                ✗ Cannot access L1 data<br>
+                                ✗ Cannot access other L2 data
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <div class="hierarchy-level">
+                        <div class="hierarchy-box level-l3">
+                            <h3>L3 Manager</h3>
+                            <div class="role">Team Lead Level</div>
+                            <div class="access-level">
+                                <strong>Direct Reports Access</strong>
+                                • Direct peer employee data<br>
+                                • Initial review authority<br>
+                                • Comment addition rights<br>
+                                ✗ Cannot access L2 data<br>
+                                ✗ Cannot access other teams
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="connector-vertical"></div>
+
+                    <div class="process-row">
+                        <div class="hierarchy-box level-peer">
+                            <h3>Software Developer</h3>
+                            <div class="role">Individual Contributor</div>
+                            <div class="access-level">
+                                <strong>Self Access Only</strong>
+                                • Own assessment data<br>
+                                • Own rating (when final)<br>
+                                ✗ No peer data access
+                            </div>
+                        </div>
+
+                        <div class="hierarchy-box level-peer">
+                            <h3>ML Engineer</h3>
+                            <div class="role">Individual Contributor</div>
+                            <div class="access-level">
+                                <strong>Self Access Only</strong>
+                                • Own assessment data<br>
+                                • Own rating (when final)<br>
+                                ✗ No peer data access
+                            </div>
+                        </div>
+
+                        <div class="hierarchy-box level-peer">
+                            <h3>QA Engineer</h3>
+                            <div class="role">Individual Contributor</div>
+                            <div class="access-level">
+                                <strong>Self Access Only</strong>
+                                • Own assessment data<br>
+                                • Own rating (when final)<br>
+                                ✗ No peer data access
+                            </div>
+                        </div>
+
+                        <div class="hierarchy-box level-peer">
+                            <h3>UI/UX Developer</h3>
+                            <div class="role">Individual Contributor</div>
+                            <div class="access-level">
+                                <strong>Self Access Only</strong>
+                                • Own assessment data<br>
+                                • Own rating (when final)<br>
+                                ✗ No peer data access
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 360 Feedback & Rating -->
+            <div id="feedback-rating" class="flowchart">
+                <div class="feedback-container">
+                    <div class="feedback-section">
+                        <h2 class="section-title">360° Feedback Collection Process</h2>
+                        
+                        <div class="process-container">
+                            <div class="process-box box-data-collection">
+                                <div class="box-header">Employee X</div>
+                                <div class="box-content">
+                                    Feedback request initiated for employee
+                                </div>
+                            </div>
+
+                            <div class="connector-vertical"></div>
+
+                            <div class="process-box box-review">
+                                <div class="box-header">Feedback Request Sent</div>
+                                <div class="box-content">
+                                    System selects 4-5 peers based on:
+                                    <ul class="box-list">
+                                        <li>Team collaboration</li>
+                                        <li>Project overlap</li>
+                                        <li>Cross-functional work</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="connector-vertical"></div>
+
+                            <div class="process-row">
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer 1 Feedback</div>
+                                    <div class="box-content">Anonymous submission</div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer 2 Feedback</div>
+                                    <div class="box-content">Anonymous submission</div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer 3 Feedback</div>
+                                    <div class="box-content">Anonymous submission</div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer 4 Feedback</div>
+                                    <div class="box-content">Anonymous submission</div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer 5 Feedback</div>
+                                    <div class="box-content">Anonymous submission</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h2 class="section-title">Rating Calculation Components</h2>
+                        
+                        <div class="feedback-grid">
+                            <div class="feedback-card">
+                                <div class="box-header">Self Assessment</div>
+                                <div class="box-content">
+                                    Employee's self-evaluation covering achievements, learning, and goals
+                                </div>
+                                <div class="weight-badge">40% Weight</div>
+                            </div>
+
+                            <div class="feedback-card">
+                                <div class="box-header">360° Feedback</div>
+                                <div class="box-content">
+                                    Aggregated peer feedback on performance and collaboration
+                                </div>
+                                <div class="weight-badge">30% Weight</div>
+                            </div>
+
+                            <div class="feedback-card">
+                                <div class="box-header">Manager Input</div>
+                                <div class="box-content">
+                                    L3 manager's assessment and validation of performance
+                                </div>
+                                <div class="weight-badge">20% Weight</div>
+                            </div>
+
+                            <div class="feedback-card">
+                                <div class="box-header">KRA Achievement</div>
+                                <div class="box-content">
+                                    Objective measurement of key result areas
+                                </div>
+                                <div class="weight-badge">10% Weight</div>
+                            </div>
+                        </div>
+
+                        <div class="process-box box-review" style="margin: 30px auto; max-width: 400px;">
+                            <div class="box-header">Rating Algorithm</div>
+                            <div class="box-content">
+                                <strong>Formula:</strong><br>
+                                Final Score = (SA × 0.4) + (F360 × 0.3) + (MR × 0.2) + (KRA × 0.1)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h2 class="section-title">Rating Scale Distribution</h2>
+                        
+                        <div class="rating-scale-container">
+                            <div class="rating-item rating-5">
+                                <span class="score">5</span>
+                                <strong>Outstanding</strong>
+                                <div>Top 10% performers</div>
+                            </div>
+                            <div class="rating-item rating-4">
+                                <span class="score">4</span>
+                                <strong>Exceeds Expectations</strong>
+                                <div>Next 20% performers</div>
+                            </div>
+                            <div class="rating-item rating-3">
+                                <span class="score">3</span>
+                                <strong>Meets Expectations</strong>
+                                <div>Middle 40% performers</div>
+                            </div>
+                            <div class="rating-item rating-2">
+                                <span class="score">2</span>
+                                <strong>Needs Improvement</strong>
+                                <div>Next 20% performers</div>
+                            </div>
+                            <div class="rating-item rating-1">
+                                <span class="score">1</span>
+                                <strong>Unsatisfactory</strong>
+                                <div>Bottom 10% performers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h2 class="section-title">Appeal Process Flow</h2>
+                        
+                        <div class="process-container">
+                            <div class="process-box box-approval">
+                                <div class="box-header">Initial Rating Communicated</div>
+                                <div class="box-content">
+                                    Employee receives rating after 1:1 meeting
+                                </div>
+                            </div>
+
+                            <div class="connector-vertical"></div>
+
+                            <div class="process-box box-decision">
+                                <div class="box-header">Employee Reviews Rating</div>
+                                <div class="box-content">
+                                    Satisfied or Appeal?
+                                </div>
+                            </div>
+
+                            <div class="process-row" style="margin-top: 30px;">
+                                <div class="process-box box-end">
+                                    <div class="box-header">If Satisfied</div>
+                                    <div class="box-content">
+                                        Rating proceeds to L1 approval
+                                    </div>
+                                </div>
+
+                                <div class="process-box box-meeting">
+                                    <div class="box-header">If Not Satisfied</div>
+                                    <div class="box-content">
+                                        <ul class="box-list">
+                                            <li>Submit appeal request</li>
+                                            <li>One-time only</li>
+                                            <li>L2 reviews appeal</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="connector-vertical"></div>
+
+                            <div class="process-box box-decision">
+                                <div class="box-header">L2 Accepts Appeal?</div>
+                                <div class="box-content">
+                                    Manager decision on appeal merit
+                                </div>
+                            </div>
+
+                            <div class="process-row" style="margin-top: 30px;">
+                                <div class="process-box box-meeting">
+                                    <div class="box-header">If Accepted</div>
+                                    <div class="box-content">
+                                        Schedule 2nd 1:1 meeting
+                                    </div>
+                                </div>
+
+                                <div class="process-box box-end">
+                                    <div class="box-header">If Rejected</div>
+                                    <div class="box-content">
+                                        Original rating stands
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="connector-vertical"></div>
+
+                            <div class="process-box box-end">
+                                <div class="box-header">Final Rating Locked</div>
+                                <div class="box-content">
+                                    No further changes possible
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Privacy Flow -->
+            <div id="privacy-flow" class="flowchart">
+                <div class="feedback-container">
+                    <div class="feedback-section">
+                        <h2 class="section-title">Data Privacy Boundaries & Access Control</h2>
+
+                        <div class="privacy-zone zone-restricted">
+                            <span class="zone-label">Peer Level - Restricted Zone</span>
+                            <div class="process-row">
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer A</div>
+                                    <div class="box-content">
+                                        • Own data only<br>
+                                        • Cannot see Peer B, C, D data<br>
+                                        • Complete isolation
+                                    </div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer B</div>
+                                    <div class="box-content">
+                                        • Own data only<br>
+                                        • Cannot see Peer A, C, D data<br>
+                                        • Complete isolation
+                                    </div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer C</div>
+                                    <div class="box-content">
+                                        • Own data only<br>
+                                        • Cannot see Peer A, B, D data<br>
+                                        • Complete isolation
+                                    </div>
+                                </div>
+                                <div class="process-box box-data-collection">
+                                    <div class="box-header">Peer D</div>
+                                    <div class="box-content">
+                                        • Own data only<br>
+                                        • Cannot see Peer A, B, C data<br>
+                                        • Complete isolation
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; margin-top: 20px; color: #c62828; font-weight: 600;">
+                                ⚠ No Cross-Access Between Peers - Complete Data Isolation
+                            </div>
+                        </div>
+
+                        <div class="privacy-zone zone-limited">
+                            <span class="zone-label">L3 Manager Zone - Limited Access</span>
+                            <div class="process-box box-review" style="margin: 0 auto; max-width: 400px;">
+                                <div class="box-header">L3 Manager Access Rights</div>
+                                <div class="box-content">
+                                    <strong>Read Access:</strong>
+                                    <ul class="box-list">
+                                        <li>All direct report peer data</li>
+                                        <li>Self-assessments</li>
+                                        <li>360 feedback results</li>
+                                    </ul>
+                                    <strong>Write Access:</strong>
+                                    <ul class="box-list">
+                                        <li>Comments and observations</li>
+                                        <li>Initial recommendations</li>
+                                    </ul>
+                                    <strong>No Access:</strong>
+                                    <ul class="box-list">
+                                        <li>L2 manager data</li>
+                                        <li>Other team data</li>
+                                        <li>Final ratings</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="privacy-zone zone-limited">
+                            <span class="zone-label">L2 Manager Zone - Extended Access</span>
+                            <div class="process-box box-review" style="margin: 0 auto; max-width: 400px;">
+                                <div class="box-header">L2 Manager Access Rights</div>
+                                <div class="box-content">
+                                    <strong>Read Access:</strong>
+                                    <ul class="box-list">
+                                        <li>All L3 manager data</li>
+                                        <li>All peer employee data</li>
+                                        <li>All feedback and comments</li>
+                                    </ul>
+                                    <strong>Write Access:</strong>
+                                    <ul class="box-list">
+                                        <li>Rating generation</li>
+                                        <li>Rating modifications</li>
+                                        <li>Meeting notes</li>
+                                    </ul>
+                                    <strong>No Access:</strong>
+                                    <ul class="box-list">
+                                        <li>L1 manager data</li>
+                                        <li>Other L2 manager data</li>
+                                        <li>Company-wide analytics</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="privacy-zone zone-limited">
+                            <span class="zone-label">L1 Manager Zone - Department Access</span>
+                            <div class="process-box box-approval" style="margin: 0 auto; max-width: 400px;">
+                                <div class="box-header">L1 Manager Access Rights</div>
+                                <div class="box-content">
+                                    <strong>Read Access:</strong>
+                                    <ul class="box-list">
+                                        <li>All department data</li>
+                                        <li>All L2, L3 manager data</li>
+                                        <li>All peer employee data</li>
+                                        <li>Department analytics</li>
+                                    </ul>
+                                    <strong>Write Access:</strong>
+                                    <ul class="box-list">
+                                        <li>Approval/rejection decisions</li>
+                                        <li>Override ratings (with audit)</li>
+                                    </ul>
+                                    <strong>No Access:</strong>
+                                    <ul class="box-list">
+                                        <li>Other L1 manager data</li>
+                                        <li>Other department data</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="privacy-zone zone-full">
+                            <span class="zone-label">CEO Zone - Full System Access</span>
+                            <div class="process-box box-start" style="margin: 0 auto; max-width: 400px;">
+                                <div class="box-header">Harry - CEO Full Access</div>
+                                <div class="box-content">
+                                    <strong>Complete System Access:</strong>
+                                    <ul class="box-list">
+                                        <li>All employee data across company</li>
+                                        <li>All ratings and feedback</li>
+                                        <li>Financial impact analysis</li>
+                                        <li>System configuration</li>
+                                        <li>Final approval authority</li>
+                                        <li>Audit trail access</li>
+                                        <li>Override capabilities</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <h2 class="section-title">Information Flow Patterns</h2>
+                        
+                        <div class="process-row">
+                            <div class="process-box box-review">
+                                <div class="box-header">Bottom-Up Data Flow</div>
+                                <div class="box-content">
+                                    <strong>Information flows upward:</strong>
+                                    <ul class="box-list">
+                                        <li>Peers → L3 Manager</li>
+                                        <li>L3 → L2 Manager</li>
+                                        <li>L2 → L1 Manager</li>
+                                        <li>L1 → CEO (Harry)</li>
+                                    </ul>
+                                    Data aggregation at each level
+                                </div>
+                            </div>
+
+                            <div class="process-box box-approval">
+                                <div class="box-header">Top-Down Approval Flow</div>
+                                <div class="box-content">
+                                    <strong>Approvals flow downward:</strong>
+                                    <ul class="box-list">
+                                        <li>CEO → L1 Manager</li>
+                                        <li>L1 → L2 Manager</li>
+                                        <li>L2 → L3 Manager</li>
+                                        <li>L3 → Peers</li>
+                                    </ul>
+                                    Final decisions cascade down
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="connector-horizontal"></div>
+
+                        <div class="process-box box-end" style="margin: 30px auto; max-width: 500px;">
+                            <div class="box-header">Data Privacy Principles</div>
+                            <div class="box-content">
+                                <ul class="box-list">
+                                    <li><strong>Need-to-Know Basis:</strong> Access limited to job requirements</li>
+                                    <li><strong>Hierarchical Inheritance:</strong> Higher levels inherit lower level access</li>
+                                    <li><strong>Lateral Isolation:</strong> No cross-access at same level</li>
+                                    <li><strong>Audit Trail:</strong> All access logged and monitored</li>
+                                    <li><strong>Data Encryption:</strong> Sensitive fields encrypted at rest</li>
+                                    <li><strong>Compliance:</strong> GDPR and data protection regulations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ffebee;"></div>
+                            <span>Restricted Access Zone</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #fff3e0;"></div>
+                            <span>Limited Access Zone</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #e8f5e9;"></div>
+                            <span>Full Access Zone</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchFlowchart(value) {
+            // Remove active class from all flowcharts
+            const flowcharts = document.querySelectorAll('.flowchart');
+            flowcharts.forEach(chart => {
+                chart.classList.remove('active');
+            });
+            
+            // Add active class to selected flowchart
+            const selectedChart = document.getElementById(value);
+            if (selectedChart) {
+                selectedChart.classList.add('active');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            switchFlowchart('complete-flow');
+        });
+    </script>
+</body>
+</html>
